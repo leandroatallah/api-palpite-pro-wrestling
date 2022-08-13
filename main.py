@@ -11,7 +11,8 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://dashboard-palpite-pro-wrestling.vercel.app/"
+    "http://dashboard-palpite-pro-wrestling.vercel.app",
+    "https://dashboard-palpite-pro-wrestling.vercel.app"
 ]
 
 app.add_middleware(
