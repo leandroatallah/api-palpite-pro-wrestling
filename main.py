@@ -11,7 +11,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    'https://api-palpite-pro-wrestling.herokuapp.com/'
+    "https://dashboard-palpite-pro-wrestling.vercel.app/"
 ]
 
 app.add_middleware(
