@@ -10,3 +10,11 @@ class Event(Base):
     description = Column(String)
     date = Column(DateTime)
     thumb = Column(String)
+
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String)
+    password = Column(String)

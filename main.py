@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import model
 from config import engine
-import router
+import router_user
+import router_event
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -31,4 +32,5 @@ def home():
     return {"Welcome Home"}
 
 
-app.include_router(router.router, prefix="/event", tags=["event"])
+app.include_router(router_user.router, prefix="/user", tags=["user"])
+app.include_router(router_event.router, prefix="/event", tags=["event"])

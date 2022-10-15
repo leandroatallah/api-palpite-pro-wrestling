@@ -26,3 +26,35 @@ class Response(GenericModel, Generic[T]):
     status: str
     message: str
     result: Optional[T]
+
+
+class UserSchema(BaseModel):
+    id: Optional[int] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class RequestUser(BaseModel):
+    parameter: UserSchema = Field(...)
+
+
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+
+
+class TokenPayload(BaseModel):
+    sub: str = None
+    exp: int = None
+
+
+class UserOut(BaseModel):
+    id: int
+    email: str
+
+
+class SystemUser(UserOut):
+    password: str
