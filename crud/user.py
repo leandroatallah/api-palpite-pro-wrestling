@@ -18,7 +18,8 @@ def create_user(db: Session, user: UserSchema):
             detail="User with this email already exist"
         )
 
-    _user = User(email=user.email, password=get_hashed_password(user.password))
+    _user = User(email=user.email, password=get_hashed_password(
+        user.password), isSuperuser=False)
     db.add(_user)
     db.commit()
     db.refresh(_user)
