@@ -1,5 +1,4 @@
 from fastapi import status, HTTPException
-from datetime import datetime
 from sqlalchemy.orm import Session
 from model import User
 from schemas import UserSchema

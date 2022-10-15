@@ -1,8 +1,6 @@
-from urllib import request
 from fastapi import APIRouter, Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from uuid import uuid4
 from model import User
 from schemas import RequestEvent, Response
 import crud.event as event

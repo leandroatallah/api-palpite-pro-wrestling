@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import Response, UserSchema
