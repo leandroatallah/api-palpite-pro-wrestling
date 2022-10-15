@@ -11,6 +11,7 @@ def get_user_by_email(db: Session, user_email: str):
 
 
 def create_user(db: Session, user: UserSchema):
+    print(user)
     _user = get_user_by_email(db=db, user_email=user.email)
     if _user is not None:
         raise HTTPException(

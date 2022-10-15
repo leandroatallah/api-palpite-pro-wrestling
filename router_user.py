@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from urllib import request
+from pydantic import BaseModel
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from schemas import RequestUser, Response
+from schemas import Response, UserSchema
 import crud.user as user
 
 router = APIRouter()
@@ -18,8 +18,8 @@ def get_db():
 
 
 @router.post('/signup')
-async def create_user(request: RequestUser, db: Session = Depends(get_db)):
-    user.create_user(db, request.parameter)
+async def create_user(request: UserSchema, db: Session = Depends(get_db)):
+    user.create_user(db, request)
     return Response(code=200, status="OK", message="User created successfully").dict(exclude_none=True)
 
 
