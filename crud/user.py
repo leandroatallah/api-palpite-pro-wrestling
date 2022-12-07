@@ -1,8 +1,25 @@
-from fastapi import status, HTTPException
+from fastapi import status, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from model import User
 from schemas import UserSchema
-from utils import create_access_token, create_refresh_token, get_hashed_password, verify_password
+from utils import (
+    create_access_token,
+    create_refresh_token,
+    get_hashed_password,
+    verify_password,
+)
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/user/login",
+    scheme_name="JWT"
+)
+
+credentials_exception = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Could not validate credentials",
+    headers={"WWW-Authenticate": "Bearer"},
+)
 
 
 def get_user_by_email(db: Session, user_email: str):
@@ -10,7 +27,6 @@ def get_user_by_email(db: Session, user_email: str):
 
 
 def create_user(db: Session, user: UserSchema):
-    print(user)
     _user = get_user_by_email(db=db, user_email=user.email)
     if _user is not None:
         raise HTTPException(

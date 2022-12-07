@@ -38,6 +38,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> SystemUser:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    return token_data
+
     # user: Union[dict[str, Any], None] = db.get(token_data.sub, None)
 
     # if user is None:

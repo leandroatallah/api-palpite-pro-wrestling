@@ -2,8 +2,11 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from config import SessionLocal
 from sqlalchemy.orm import Session
+from model import User
 from schemas import Response, UserSchema
 import crud.user as user
+from crud.user import get_user_by_email
+from deps import get_current_user
 
 router = APIRouter()
 
@@ -26,7 +29,12 @@ async def create_user(request: UserSchema, db: Session = Depends(get_db)):
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     return user.login_user(db, form_data)
 
-# @router.get('/')
-# async def get(email: str, db: Session = Depends(get_db)):
-#     _user = user.get_user_by_email(db, email)
-#     return Response(code=200, status="Ok", message="Success fetch all data", result=_user).dict(exclude_none=True)
+
+@router.get('/me')
+async def get_user(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    _user = get_user_by_email(db, current_user.sub)
+    result = {
+        'email': _user.email,
+        'isSuperuser': _user.isSuperuser,
+    }
+    return Response(code=200, status="Ok", message="Success fetch all data", result=result).dict(exclude_none=True)
