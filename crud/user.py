@@ -42,6 +42,14 @@ def create_user(db: Session, user: UserSchema):
     return _user
 
 
+def edit_user_password(db: Session, user_email: str, password: str):
+    _user = get_user_by_email(db=db, user_email=user_email)
+    _user.password = get_hashed_password(password)
+    db.commit()
+    db.refresh(_user)
+    return _user
+
+
 def login_user(db: Session, user: UserSchema):
     _user = get_user_by_email(db=db, user_email=user.username)
 

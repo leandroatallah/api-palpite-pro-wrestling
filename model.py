@@ -30,3 +30,11 @@ class Event(Base):
     date = Column(DateTime)
     thumb = Column(String)
     matches = relationship('Match')
+
+
+class Season(Base):
+    __tablename__ = 'season'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    status = Column(String)

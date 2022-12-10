@@ -25,6 +25,13 @@ async def create_user(request: UserSchema, db: Session = Depends(get_db)):
     return Response(code=200, status="OK", message="User created successfully").dict(exclude_none=True)
 
 
+@router.patch('/edit-password')
+async def edit_user_password(request: UserSchema, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    user.edit_user_password(
+        db=db, user_email=current_user.sub, password=request.password)
+    return Response(code=200, status="OK", message="User password updated successfully").dict(exclude_none=True)
+
+
 @router.post('/login', summary="Create access and refresh tokens for user")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     return user.login_user(db, form_data)

@@ -21,6 +21,19 @@ class RequestEvent(BaseModel):
     parameter: EventSchema = Field(...)
 
 
+class SeasonSchema(BaseModel):
+    id: Optional[int] = None
+    title: Optional[str] = None
+    status: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class RequestSeason(BaseModel):
+    parameter: SeasonSchema = Field(...)
+
+
 class Response(GenericModel, Generic[T]):
     code: int = 200
     status: str
