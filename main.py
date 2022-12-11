@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import model
 from config import engine
+from api.user import routes as user_routes
 from api.event import routes as event_routes
 from api.season import routes as season_routes
-from api.user import routes as user_routes
+from api.match import routes as match_routes
+from api.wrestler import routes as wrestler_routes
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -35,4 +37,7 @@ def home():
 
 app.include_router(user_routes.router, prefix="/user", tags=["user"])
 app.include_router(event_routes.router, prefix="/event", tags=["event"])
+app.include_router(match_routes.router, prefix="/match", tags=["match"])
 app.include_router(season_routes.router, prefix="/season", tags=["season"])
+app.include_router(wrestler_routes.router,
+                   prefix="/wrestler", tags=["wrestler"])

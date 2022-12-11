@@ -13,7 +13,8 @@ def get_event_by_id(db: Session, event_id: int):
 
 
 def create_event(db: Session, event: EventSchema):
-    _event = Event(title=event.title, status=event.status)
+    _event = Event(title=event.title, description=event.description,
+                   date=event.date, thumb=event.thumb)
     db.add(_event)
     db.commit()
     db.refresh(_event)

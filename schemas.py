@@ -1,24 +1,26 @@
 import datetime
-from typing import Optional, Generic, TypeVar
+from typing import Optional, Generic, TypeVar, List
 from pydantic import BaseModel, Field
 from pydantic.generics import GenericModel
 
 T = TypeVar('T')
 
 
-class EventSchema(BaseModel):
+class UserSchema(BaseModel):
     id: Optional[int] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    date: Optional[datetime.datetime] = None
-    thumb: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
 
     class Config:
         orm_mode = True
 
 
-class RequestEvent(BaseModel):
-    parameter: EventSchema = Field(...)
+class WrestlerSchema(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str] = None
+
+    class Config:
+        orm_mode = True
 
 
 class SeasonSchema(BaseModel):
@@ -30,24 +32,54 @@ class SeasonSchema(BaseModel):
         orm_mode = True
 
 
+class GuessSchema(BaseModel):
+    id: Optional[int] = None
+    user: Optional[int] = None
+    match: Optional[int] = None
+    winner: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+
+class MatchSchema(BaseModel):
+    id: Optional[int] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    event_id: Optional[int] = None
+    guesses: List[GuessSchema] = None
+    wrestlers: List[WrestlerSchema] = None
+
+    class Config:
+        orm_mode = True
+
+
+class EventSchema(BaseModel):
+    id: Optional[int] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    date: Optional[datetime.datetime] = None
+    thumb: Optional[str] = None
+    matches: List[MatchSchema] = None
+
+    class Config:
+        orm_mode = True
+
+
 class RequestSeason(BaseModel):
     parameter: SeasonSchema = Field(...)
 
 
-class Response(GenericModel, Generic[T]):
-    code: int = 200
-    status: str
-    message: str
-    result: Optional[T]
+class RequestEvent(BaseModel):
+    parameter: EventSchema = Field(...)
 
 
-class UserSchema(BaseModel):
-    id: Optional[int] = None
-    email: Optional[str] = None
-    password: Optional[str] = None
+class RequestMatch(BaseModel):
+    parameter: MatchSchema = Field(...)
 
-    class Config:
-        orm_mode = True
+
+class RequestWrestler(BaseModel):
+    parameter: WrestlerSchema = Field(...)
 
 
 class RequestUser(BaseModel):
@@ -62,6 +94,13 @@ class TokenSchema(BaseModel):
 class TokenPayload(BaseModel):
     sub: str = None
     exp: int = None
+
+
+class Response(GenericModel, Generic[T]):
+    code: int = 200
+    status: str
+    message: str
+    result: Optional[T]
 
 
 class UserOut(BaseModel):
