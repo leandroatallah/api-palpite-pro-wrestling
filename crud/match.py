@@ -8,6 +8,10 @@ def get_match(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Match).offset(skip).limit(limit).all()
 
 
+def get_matches_by_event_id(db: Session, event_id: int):
+    return db.query(Match).filter(Match.event_id == event_id).all()
+
+
 def get_match_by_id(db: Session, match_id: int):
     return db.query(Match).filter(Match.id == match_id).first()
 

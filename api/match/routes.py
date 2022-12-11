@@ -24,8 +24,12 @@ async def create(request: RequestMatch, db: Session = Depends(get_db), user: Use
 
 
 @router.get('/')
-async def get(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    _match = match.get_match(db, 0, 100)
+async def get(db: Session = Depends(get_db), user: User = Depends(get_current_user), event_id: int | None = None):
+    if event_id:
+        _match = match.get_matches_by_event_id(db, event_id=event_id)
+    else:
+        _match = match.get_match(db, 0, 100)
+
     return Response(code=200, status="Ok", message="Success fetch all data", result=_match).dict(exclude_none=True)
 
 
@@ -43,9 +47,8 @@ async def update_match(request: RequestMatch, db: Session = Depends(get_db), use
         match_id=request.parameter.id,
         title=request.parameter.title,
         description=request.parameter.description,
-        status=request.parameter.status,
-        # event_id=request.parameter.event_id,
-        # guesses=request.parameter.guesses,
+        event_id=request.parameter.event_id,
+        guesses=request.parameter.guesses,
         wrestlers=request.parameter.wrestlers
     )
     return Response(code=200, status="Ok", message="Success update data", result=_match).dict(exclude_none=True)
