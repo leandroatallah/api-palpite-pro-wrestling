@@ -28,6 +28,7 @@ class Event(Base):
     description = Column(String)
     date = Column(DateTime)
     thumb = Column(String)
+    season_id = Column(Integer, ForeignKey("season.id"))
     matches = relationship('Match')
 
 

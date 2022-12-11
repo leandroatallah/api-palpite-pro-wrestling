@@ -39,7 +39,8 @@ async def get_by_id(id: int, db: Session = Depends(get_db), user: User = Depends
 async def update_event(request: RequestEvent, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     print(request.parameter)
     _event = event.update_event(db, event_id=request.parameter.id, title=request.parameter.title,
-                                description=request.parameter.description, date=request.parameter.date, thumb=request.parameter.thumb)
+                                description=request.parameter.description, date=request.parameter.date,
+                                thumb=request.parameter.thumb, season_id=request.parameter.season_id)
     return Response(code=200, status="Ok", message="Success update data", result=_event).dict(exclude_none=True)
 
 

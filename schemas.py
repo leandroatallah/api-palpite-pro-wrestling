@@ -61,6 +61,7 @@ class EventSchema(BaseModel):
     date: Optional[datetime.datetime] = None
     thumb: Optional[str] = None
     matches: List[MatchSchema] = None
+    season_id: Optional[int] = None
 
     class Config:
         orm_mode = True
