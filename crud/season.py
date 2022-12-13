@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy.orm import Session
 from model import Season
 from schemas import SeasonSchema

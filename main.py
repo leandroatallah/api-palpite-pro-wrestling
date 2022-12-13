@@ -7,6 +7,7 @@ from api.event import routes as event_routes
 from api.season import routes as season_routes
 from api.match import routes as match_routes
 from api.wrestler import routes as wrestler_routes
+from api.guess import routes as guess_routes
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -39,5 +40,6 @@ app.include_router(user_routes.router, prefix="/user", tags=["user"])
 app.include_router(event_routes.router, prefix="/event", tags=["event"])
 app.include_router(match_routes.router, prefix="/match", tags=["match"])
 app.include_router(season_routes.router, prefix="/season", tags=["season"])
+app.include_router(guess_routes.router, prefix="/guess", tags=["guess"])
 app.include_router(wrestler_routes.router,
                    prefix="/wrestler", tags=["wrestler"])

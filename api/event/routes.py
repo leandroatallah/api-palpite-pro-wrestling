@@ -24,9 +24,11 @@ async def create(request: RequestEvent, db: Session = Depends(get_db), user: Use
 
 
 @router.get('/')
-async def get(db: Session = Depends(get_db), user: User = Depends(get_current_user), season_id: int | None = None):
+async def get(db: Session = Depends(get_db), user: User = Depends(get_current_user), season_id: int | None = None, event_status: str | None = None):
     if season_id:
         _event = event.get_events_by_season_id(db, season_id=season_id)
+    elif event_status:
+        _event = event.get_events_by_status(db, status=event_status)
     else:
         _event = event.get_event(db, 0, 100)
     return Response(code=200, status="Ok", message="Success fetch all data", result=_event).dict(exclude_none=True)

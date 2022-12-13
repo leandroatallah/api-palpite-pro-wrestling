@@ -60,6 +60,7 @@ class EventSchema(BaseModel):
     description: Optional[str] = None
     date: Optional[datetime.datetime] = None
     thumb: Optional[str] = None
+    status: Optional[str] = None
     matches: List[MatchSchema] = None
     season_id: Optional[int] = None
 
@@ -85,6 +86,10 @@ class RequestWrestler(BaseModel):
 
 class RequestUser(BaseModel):
     parameter: UserSchema = Field(...)
+
+
+class RequestGuess(BaseModel):
+    parameter: GuessSchema = Field(...)
 
 
 class TokenSchema(BaseModel):

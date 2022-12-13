@@ -12,6 +12,10 @@ def get_events_by_season_id(db: Session, season_id: int):
     return db.query(Event).filter(Event.season_id == season_id).all()
 
 
+def get_events_by_status(db: Session, event_status: str):
+    return db.query(Event).filter(Event.status == event_status).all()
+
+
 def get_event_by_id(db: Session, event_id: int):
     return db.query(Event).filter(Event.id == event_id).first()
 
