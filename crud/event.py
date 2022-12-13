@@ -21,7 +21,7 @@ def get_event_by_id(db: Session, event_id: int):
 
 
 def create_event(db: Session, event: EventSchema):
-    _event = Event(title=event.title, description=event.description,
+    _event = Event(status=event.status, title=event.title, description=event.description,
                    date=event.date, thumb=event.thumb, season_id=event.season_id)
     db.add(_event)
     db.commit()
@@ -35,9 +35,10 @@ def remove_event(db: Session, event_id: int):
     db.commit()
 
 
-def update_event(db: Session, event_id: int, title: str, description: str,
+def update_event(db: Session, event_id: int, status: str, title: str, description: str,
                  date: datetime, thumb: str, season_id: int):
     _event = get_event_by_id(db=db, event_id=event_id)
+    _event.status = status
     _event.title = title
     _event.description = description
     _event.date = date
