@@ -48,8 +48,8 @@ async def update_match(request: RequestMatch, db: Session = Depends(get_db), use
         title=request.parameter.title,
         description=request.parameter.description,
         event_id=request.parameter.event_id,
-        guesses=request.parameter.guesses,
-        wrestlers=request.parameter.wrestlers
+        wrestler_one_id=request.parameter.wrestler_one_id,
+        wrestler_two_id=request.parameter.wrestler_two_id
     )
     return Response(code=200, status="Ok", message="Success update data", result=_match).dict(exclude_none=True)
 

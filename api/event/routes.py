@@ -26,11 +26,12 @@ async def create(request: RequestEvent, db: Session = Depends(get_db), user: Use
 @router.get('/')
 async def get(db: Session = Depends(get_db), user: User = Depends(get_current_user), season_id: int | None = None, event_status: str | None = None):
     if season_id:
-        _event = event.get_events_by_season_id(db, season_id=season_id)
+        _event = event.get_events_by_season_id(
+            db, season_id=season_id, user=user)
     elif event_status:
-        _event = event.get_events_by_status(db, status=event_status)
+        _event = event.get_events_by_status(db, status=event_status, user=user)
     else:
-        _event = event.get_event(db, 0, 100)
+        _event = event.get_event(db, 0, 100, user=user)
     return Response(code=200, status="Ok", message="Success fetch all data", result=_event).dict(exclude_none=True)
 
 
@@ -42,7 +43,6 @@ async def get_by_id(id: int, db: Session = Depends(get_db), user: User = Depends
 
 @router.post("/update")
 async def update_event(request: RequestEvent, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    print(request.parameter)
     _event = event.update_event(db, event_id=request.parameter.id, status=request.parameter.status,
                                 title=request.parameter.title, description=request.parameter.description,
                                 date=request.parameter.date, thumb=request.parameter.thumb,

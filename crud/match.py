@@ -21,8 +21,8 @@ def create_match(db: Session, match: MatchSchema):
         title=match.title,
         description=match.description,
         event_id=match.event_id,
-        guesses=match.guesses,
-        wrestlers=match.wrestlers,
+        wrestler_one_id=match.wrestler_one_id,
+        wrestler_two_id=match.wrestler_two_id
     )
     db.add(_match)
     db.commit()
@@ -36,13 +36,13 @@ def remove_match(db: Session, match_id: int):
     db.commit()
 
 
-def update_match(db: Session, match_id: int, title: str, description: str, event_id: int, guesses: tuple, wrestlers: tuple):
+def update_match(db: Session, match_id: int, title: str, description: str, event_id: int, wrestler_one_id: int, wrestler_two_id: int):
     _match = get_match_by_id(db=db, match_id=match_id)
     _match.title = title
     _match.description = description
     _match.event_id = event_id
-    _match.guesses = guesses
-    _match.wrestlers = wrestlers
+    _match.wrestler_one_id = wrestler_one_id
+    _match.wrestler_two_id = wrestler_two_id
     db.commit()
     db.refresh(_match)
     return _match

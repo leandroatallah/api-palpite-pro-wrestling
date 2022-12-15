@@ -1,19 +1,37 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
-from model import Event
-from schemas import EventSchema
+from model import Event, Guess
+from schemas import EventSchema, UserSchema
+from crud.user import get_user_by_email
 
 
-def get_event(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Event).offset(skip).limit(limit).all()
+def set_guess_count(db: Session, events, user_id: int):
+    for _event in events:
+        _event.guess_count = db.query(Guess).filter(
+            Guess.event_id == _event.id, Guess.user_id == user_id).count()
+    return events
 
 
-def get_events_by_season_id(db: Session, season_id: int):
-    return db.query(Event).filter(Event.season_id == season_id).all()
+def get_event(db: Session, skip: int = 0, limit: int = 100, user: UserSchema = None):
+    user = get_user_by_email(db, user.sub)
+    events = db.query(Event).offset(skip).limit(limit).all()
+    events = set_guess_count(db, events, user.id)
+
+    return events
 
 
-def get_events_by_status(db: Session, status: str):
-    return db.query(Event).filter(Event.status == status).all()
+def get_events_by_season_id(db: Session, season_id: int, user: UserSchema):
+    user = get_user_by_email(db, user.sub)
+    events = db.query(Event).filter(Event.season_id == season_id).all()
+    events = set_guess_count(db, events, user.id)
+    return events
+
+
+def get_events_by_status(db: Session, status: str, user: UserSchema):
+    user = get_user_by_email(db, user.sub)
+    events = db.query(Event).filter(Event.status == status).all()
+    events = set_guess_count(db, events, user.id)
+    return events
 
 
 def get_event_by_id(db: Session, event_id: int):

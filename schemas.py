@@ -1,7 +1,9 @@
 import datetime
-from typing import Optional, Generic, TypeVar, List
+from typing import Optional, Generic, TypeVar, List, Union
 from pydantic import BaseModel, Field
 from pydantic.generics import GenericModel
+from sqlalchemy.orm import relationship
+# from model import MatchResult
 
 T = TypeVar('T')
 
@@ -34,9 +36,12 @@ class SeasonSchema(BaseModel):
 
 class GuessSchema(BaseModel):
     id: Optional[int] = None
-    user: Optional[int] = None
-    match: Optional[int] = None
-    winner: Optional[int] = None
+    user_id: Optional[int] = None
+    event_id: Optional[int] = None
+    match_id: Optional[int] = None
+    winner_id: Optional[int] = None
+    # result: MatchResult = None
+    result: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -47,8 +52,9 @@ class MatchSchema(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     event_id: Optional[int] = None
-    guesses: List[GuessSchema] = None
-    wrestlers: List[WrestlerSchema] = None
+    wrestler_one_id: Optional[int] = None
+    wrestler_two_id: Optional[int] = None
+    guesses: "List[GuessSchema]" = None
 
     class Config:
         orm_mode = True

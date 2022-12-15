@@ -1,7 +1,7 @@
 from fastapi import status, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from model import User
+from model import User, Guess
 from schemas import UserSchema
 from utils import (
     create_access_token,
@@ -22,8 +22,16 @@ credentials_exception = HTTPException(
 )
 
 
+def get_users(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(User).offset(skip).limit(limit).with_entities(User.id, User.email, User.isSuperuser).all()
+
+
 def get_user_by_email(db: Session, user_email: str):
-    return db.query(User).filter(User.email == user_email).first()
+    _user = db.query(User).filter(User.email == user_email).first()
+    guess_count = db.query(Guess).filter(
+        Guess.user_id == _user.id).count()
+    _user.guess_count = guess_count
+    return _user
 
 
 def create_user(db: Session, user: UserSchema):
@@ -48,6 +56,34 @@ def edit_user_password(db: Session, user_email: str, password: str):
     db.commit()
     db.refresh(_user)
     return _user
+
+
+def promote_user(db: Session, id: int, user_email: str):
+    current_user = get_user_by_email(db=db, user_email=user_email)
+    _user = db.query(User).filter(User.id == id).first()
+
+    if _user.id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You can't alter this user"
+        )
+    _user.isSuperuser = not _user.isSuperuser
+    db.commit()
+    db.refresh(_user)
+    return _user
+
+
+def remove_user(db: Session, id: int, user_email: str):
+    current_user = get_user_by_email(db=db, user_email=user_email)
+    _user = db.query(User).filter(User.id == id).first()
+
+    if _user.id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You can't delete this user"
+        )
+    db.delete(_user)
+    db.commit()
 
 
 def login_user(db: Session, user: UserSchema):
