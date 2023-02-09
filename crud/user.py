@@ -28,10 +28,11 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 def get_user_by_email(db: Session, user_email: str):
     _user = db.query(User).filter(User.email == user_email).first()
-    guess_count = db.query(Guess).filter(
-        Guess.user_id == _user.id).count()
-    _user.guess_count = guess_count
-    return _user
+    if _user is not None:
+        guess_count = db.query(Guess).filter(
+            Guess.user_id == _user.id).count()
+        _user.guess_count = guess_count
+        return _user
 
 
 def create_user(db: Session, user: UserSchema):
